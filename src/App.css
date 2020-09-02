@@ -7,7 +7,6 @@
 .text-input {
   background-color: white;
   width: 250px;
-  margin-top: 150px;
   padding: 10px;
 }
 .title {
@@ -25,4 +24,26 @@
   margin-top: 30px;
   color: white;
 }
-.button:hover { background-color: #10306d; } 
+.button:hover {
+  background-color: #10306d;
+}
+.margin-top-20px {
+  margin-top: 20px;
+}
+.margin-top-50px {
+  margin-top: 50px;
+}
+.margin-top-150px {
+  margin-top: 150px;
+}
+
+.text-input-with-icon-container {
+  position: relative;
+}
+
+.meuIconeLoucao {
+  position: "absolute";
+  right: "1em";
+  top: "33%";
+  background-color: "white";
+}
