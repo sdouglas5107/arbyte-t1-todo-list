@@ -1,26 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
 import TasksList from "../components/TasksList";
 import TextInputWithIcon from "../components/TextInputWithIcon";
-const tasks = [
-  {
-    id: 7,
-    description: "Subir Essa Api",
-    completed: false,
-  },
-  {
-    id: 8,
-    description: "Conectar esse App com a API",
-    completed: false,
-  },
-  {
-    id: 9,
-    description: "Subir o código para o github no final da aula.",
-    completed: false,
-  },
-];
+import { getTasks, createTask } from "../api/task";
+
 const TasksScreen = ({ history }) => {
+  const [newTaskDescription, setNewTaskDescription] = useState("");
+  const [tasks, setTasks] = useState([]);
+
+  const listTasks = async () => {
+    const tasks = await getTasks();
+    setTasks(tasks);
+  };
+
+  const newTask = async () => {
+    await createTask({ description: newTaskDescription });
+    listTasks();
+    setNewTaskDescription("");
+  };
+
+  useEffect(() => {
+    listTasks();
+  }, []);
+
   const onTaskDeleted = (task) => {
     console.log("OnTaskDeleted", task);
   };
@@ -35,8 +38,8 @@ const TasksScreen = ({ history }) => {
 
       <TextInputWithIcon
         placeholder="Digite uma tarefa"
-        onChangeText={console.log}
-        onPress={() => console.log("Botão do TextInputWithIcon clicado")}
+        onChangeText={setNewTaskDescription}
+        onPress={newTask}
         icon="plus"
       ></TextInputWithIcon>
 

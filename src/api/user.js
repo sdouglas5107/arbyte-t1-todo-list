@@ -8,3 +8,8 @@ export async function login(email) {
 
   return response.data;
 }
+
+export async function signup({ email, fullName }) {
+  const { data } = await Axios.post(`${baseUrl}/users`, { email, fullName });
+  return data;
+}

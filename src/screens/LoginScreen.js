@@ -26,6 +26,7 @@ const LoginScreen = ({ history }) => {
         className="margin-top-50px"
         placeholder="seu@email.com"
         onChangeText={(text) => setEmail(text)}
+        onEnterPressed={doLogin}
       />
       <Button onPress={doLogin}>Entrar</Button>
       <Button onPress={() => history.push("/signup")}>Cadastrar</Button>
