@@ -6,21 +6,13 @@ import TextInputWithIcon from "../components/TextInputWithIcon";
 import { getTasks, createTask, deleteTask, updateTask } from "../api/task";
 import { isLoggedIn } from "../api/user";
 import { connect } from "react-redux";
+import listTasksAction from "../redux/actions/listTasks";
+import createTaskAction from "../redux/actions/createTask";
+import deleteTaskAction from "../redux/actions/deleteTask";
+import updateTaskAction from "../redux/actions/updateTask";
 
-const TasksScreen = ({ history }) => {
+const TasksScreen = ({ history, dispatch }) => {
   const [newTaskDescription, setNewTaskDescription] = useState("");
-  const [tasks, setTasks] = useState([]);
-
-  const listTasks = async () => {
-    const tasks = await getTasks();
-    setTasks(tasks);
-  };
-
-  const newTask = async () => {
-    setNewTaskDescription("");
-    await createTask({ description: newTaskDescription });
-    listTasks();
-  };
 
   useEffect(() => {
     if (isLoggedIn()) {
@@ -29,16 +21,27 @@ const TasksScreen = ({ history }) => {
     } else {
       history.push("/login");
     }
-  }, [history]);
+  }, []);
+
+  const listTasks = async () => {
+    const tasks = await getTasks();
+    dispatch(listTasksAction(tasks));
+  };
+
+  const newTask = async () => {
+    setNewTaskDescription("");
+    const created = await createTask({ description: newTaskDescription });
+    dispatch(createTaskAction(created));
+  };
 
   const onTaskDeleted = async (task) => {
     await deleteTask(task.id);
-    listTasks();
+    dispatch(deleteTaskAction(task));
   };
 
   const onTaskUpdated = async (task) => {
-    await updateTask(task.id, task);
-    listTasks();
+    const updated = await updateTask(task.id, task);
+    dispatch(updateTaskAction(updated));
   };
   return (
     <>
@@ -55,7 +58,6 @@ const TasksScreen = ({ history }) => {
 
       <TasksList
         className="margin-top-50px"
-        tasks={tasks}
         onTaskUpdated={onTaskUpdated}
         onTaskDeleted={onTaskDeleted}
       ></TasksList>
@@ -65,10 +67,4 @@ const TasksScreen = ({ history }) => {
   );
 };
 
-const mapStoreToProps = (store) => {
-  return {
-    tasks: store.tasks,
-  };
-};
-
-export default connect(mapStoreToProps)(TasksScreen);
+export default connect()(TasksScreen);

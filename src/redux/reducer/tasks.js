@@ -1,7 +1,12 @@
 const replaceTask = (tasks, id, task) => {
   const indexOf = tasks.findIndex((currentTask) => currentTask.id === id);
-  tasks.splice(indexOf, 1, task);
-  return tasks;
+  const args = [indexOf, 1];
+  if (task) {
+    args.push(task);
+  }
+  tasks.splice(...args);
+
+  return [...tasks];
 };
 
 const initialState = { tasks: [] };
