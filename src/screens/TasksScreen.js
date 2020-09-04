@@ -5,6 +5,7 @@ import TasksList from "../components/TasksList";
 import TextInputWithIcon from "../components/TextInputWithIcon";
 import { getTasks, createTask, deleteTask, updateTask } from "../api/task";
 import { isLoggedIn } from "../api/user";
+import { connect } from "react-redux";
 
 const TasksScreen = ({ history }) => {
   const [newTaskDescription, setNewTaskDescription] = useState("");
@@ -64,4 +65,10 @@ const TasksScreen = ({ history }) => {
   );
 };
 
-export default TasksScreen;
+const mapStoreToProps = (store) => {
+  return {
+    tasks: store.tasks,
+  };
+};
+
+export default connect(mapStoreToProps)(TasksScreen);
