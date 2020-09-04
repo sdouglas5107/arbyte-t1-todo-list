@@ -22,3 +22,16 @@ export async function createTask(task, token = getToken()) {
 
   return response.data;
 }
+
+export async function deleteTask(id) {
+  await Axios.delete(`${baseUrl}/tasks/${id}`, {
+    headers: { authorization: `Bearer ${getToken()}` },
+  });
+}
+
+export async function updateTask(id, task) {
+  const response = await Axios.put(`${baseUrl}/tasks/${id}`, task, {
+    headers: { authorization: `Bearer ${getToken()}` },
+  });
+  return response.data;
+}

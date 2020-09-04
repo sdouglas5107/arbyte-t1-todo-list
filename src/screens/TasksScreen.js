@@ -3,7 +3,8 @@ import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
 import TasksList from "../components/TasksList";
 import TextInputWithIcon from "../components/TextInputWithIcon";
-import { getTasks, createTask } from "../api/task";
+import { getTasks, createTask, deleteTask, updateTask } from "../api/task";
+import { isLoggedIn } from "../api/user";
 
 const TasksScreen = ({ history }) => {
   const [newTaskDescription, setNewTaskDescription] = useState("");
@@ -15,21 +16,28 @@ const TasksScreen = ({ history }) => {
   };
 
   const newTask = async () => {
+    setNewTaskDescription("");
     await createTask({ description: newTaskDescription });
     listTasks();
-    setNewTaskDescription("");
   };
 
   useEffect(() => {
-    listTasks();
-  }, []);
+    if (isLoggedIn()) {
+      listTasks();
+      return;
+    } else {
+      history.push("/login");
+    }
+  }, [history]);
 
-  const onTaskDeleted = (task) => {
-    console.log("OnTaskDeleted", task);
+  const onTaskDeleted = async (task) => {
+    await deleteTask(task.id);
+    listTasks();
   };
 
-  const onTaskUpdated = (task) => {
-    console.log("OnTaskUpdated", task);
+  const onTaskUpdated = async (task) => {
+    await updateTask(task.id, task);
+    listTasks();
   };
   return (
     <>
@@ -40,6 +48,7 @@ const TasksScreen = ({ history }) => {
         placeholder="Digite uma tarefa"
         onChangeText={setNewTaskDescription}
         onPress={newTask}
+        value={newTaskDescription}
         icon="plus"
       ></TextInputWithIcon>
 

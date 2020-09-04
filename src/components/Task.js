@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Icon from "../components/Icon";
+import TextInput from "./TextInput";
 const Task = ({ task, onTaskUpdated, onTaskDeleted }) => {
   const [completed, setCompleted] = useState(task.completed);
   const [disabled, setDisabled] = useState(true);
@@ -22,11 +23,10 @@ const Task = ({ task, onTaskUpdated, onTaskDeleted }) => {
         checked={completed}
         onChange={(event) => onCheckChanged(event.target.checked)}
       />
-      <input
-        className="text-input"
+      <TextInput
         value={description}
-        onChange={(event) => setDescription(event.target.value)}
-        type="text"
+        onChangeText={(text) => setDescription(text)}
+        onEnterPressed={onSavePressed}
         disabled={disabled}
       />
       {disabled ? (

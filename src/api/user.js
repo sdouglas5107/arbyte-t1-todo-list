@@ -13,3 +13,7 @@ export async function signup({ email, fullName }) {
   const { data } = await Axios.post(`${baseUrl}/users`, { email, fullName });
   return data;
 }
+
+export function isLoggedIn() {
+  return !!localStorage.getItem("userData");
+}
